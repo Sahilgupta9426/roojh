@@ -9,6 +9,8 @@ import 'package:roojh/local_storage/local_storage.dart';
 
 import '../common_code/topImg.dart';
 
+// ###
+// Biometric Athentication
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);
 
@@ -57,6 +59,8 @@ class _AuthPageState extends State<AuthPage> {
         () => _authorized = authenticated ? 'Authorized' : 'Not Authorized');
   }
 
+// ###
+// cancel authentication with biometric
   void _cancelAuthentication() async {
     await auth.stopAuthentication();
     setState(() => _isAuthenticating = false);
@@ -80,17 +84,15 @@ class _AuthPageState extends State<AuthPage> {
     return isAuthenticated;
   }
 
+  // ###
   // local storage
-  final LocalStorage secureStorage = LocalStorage();
-  // local storage end
-  // var getpin1 = '';
+  // final LocalStorage secureStorage = LocalStorage();
 
   @override
   void initState() {
     super.initState();
 
     _authenticate();
-    // secureStorage.readSecureData('pin1').then((value) => getpin1 = value);
   }
 //check auth is available or not end
 
@@ -98,12 +100,14 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     var getpin1 = '';
 
-    secureStorage.readSecureData('pin1').then((value) => getpin1 = value);
+    // secureStorage.readSecureData('pin1').then((value) => getpin1 = value);
 
     return EnterPin();
   }
 }
 
+// ###
+// Pin Password AUthentication
 class EnterPin extends StatefulWidget {
   const EnterPin({Key? key}) : super(key: key);
 
@@ -114,7 +118,7 @@ class EnterPin extends StatefulWidget {
 class _EnterPinState extends State<EnterPin> {
   final LocalAuthentication auth = LocalAuthentication();
 
-  //form
+  //form key
   final _formKey = GlobalKey<FormState>();
 
   var getpin = "";

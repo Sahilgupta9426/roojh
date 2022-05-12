@@ -6,10 +6,11 @@ import 'package:roojh/Login_page/main_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:roojh/pin_password/bio_authpage.dart';
 
+// firebase authentication
 class FireAuth {
   final _auth = FirebaseAuth.instance;
   var user;
-
+// sign in with email
   Future<String?> signIn(String email, String password, context) async {
     try {
       await _auth
@@ -31,6 +32,7 @@ class FireAuth {
     }
   }
 
+// sign out
   Future<void> signout(context) async {
     try {
       await _auth
@@ -48,15 +50,19 @@ class FireAuth {
     }
   }
 
+//sign up with email and password
   Future<String?> signUp(email, password, context) async {
     try {
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      //if email is not verified  it redirect to verify page
       if (!_auth.currentUser!.emailVerified) {
         await checkEmailVerified(context);
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => VerifyEmail()));
-      } else {
+      }
+      //if user is verified
+      else {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => SignIn(notify: '1')),
         );
@@ -68,12 +74,14 @@ class FireAuth {
     }
   }
 
+// check email verified
   Future<void> checkEmailVerified(context) async {
     if (_auth.currentUser != null) {
       await _auth.currentUser?.sendEmailVerification();
     }
   }
 
+//user status check
   Future<void> userStatus() async {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
@@ -84,7 +92,7 @@ class FireAuth {
     });
   }
 
-  // social login
+  // Login with Google
   Future<void> googleLogin(context) async {
     try {
       GoogleSignIn _googleSigIn = await GoogleSignIn(scopes: ['email']);
@@ -100,9 +108,5 @@ class FireAuth {
     } catch (e) {
       print('error-');
     }
-  }
-
-  Future<void> userCurrentState() async {
-    user = await _auth.currentUser;
   }
 }
