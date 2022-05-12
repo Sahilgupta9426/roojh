@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "678444804532",
+    "project_id": "roojhproject",
+    "storage_bucket": "roojhproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:678444804532:android:a8c804b2b9bbae7efe2ae1",
+        "android_client_info": {
+          "package_name": "com.example.roojh"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "678444804532-8447io06i309agukenggkod2stp630lf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAb9QUhpsOEZWijIAY4TjKIhheVakSZobA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "678444804532-8447io06i309agukenggkod2stp630lf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
