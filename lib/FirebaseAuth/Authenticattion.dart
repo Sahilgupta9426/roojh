@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:roojh/FirebaseAuth/cofirmation_code/email_confirmation.dart';
 import 'package:roojh/Login_page/main_login.dart';
-import 'package:roojh/homepage/home.dart';
+
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:roojh/pin_password/bio_authpage.dart';
 
@@ -37,6 +37,7 @@ class FireAuth {
           .signOut()
           .then((value) async => await _auth.currentUser?.reload());
       // await _auth.currentUser?.reload();
+
       print('sign out $_auth');
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => SignIn(notify: '0')),
@@ -87,7 +88,7 @@ class FireAuth {
   Future<void> googleLogin(context) async {
     try {
       GoogleSignIn _googleSigIn = await GoogleSignIn(scopes: ['email']);
-      await _googleSigIn.signIn();
+      final googleUser = await _googleSigIn.signIn();
       GoogleSignInAccount? user = await _googleSigIn.currentUser;
       print('User is signed in! $user');
       if (user != null) {

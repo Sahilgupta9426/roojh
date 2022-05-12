@@ -1,12 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:hexcolor/hexcolor.dart';
-import 'package:roojh/FirebaseAuth/Authenticattion.dart';
 
-import 'package:roojh/forget_password/main_forgetpassword.dart';
-import 'package:roojh/homepage/home.dart';
+import 'package:roojh/FirebaseAuth/Authenticattion.dart';
 
 //login form
 class LoginField extends StatefulWidget {
