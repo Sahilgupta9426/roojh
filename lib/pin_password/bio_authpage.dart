@@ -4,6 +4,7 @@ import 'package:hexcolor/hexcolor.dart';
 
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:roojh/homepage/upload_file/upload_main.dart';
 // import 'package:roojh/homepage/createpin.dart';
 import 'package:roojh/local_storage/local_storage.dart';
 
@@ -40,7 +41,10 @@ class _AuthPageState extends State<AuthPage> {
           useErrorDialogs: true,
           stickyAuth: true);
       if (authenticated) {
-        await Navigator.pushReplacementNamed(context, '/home');
+        // await Navigator.pushReplacementNamed(context, '/home');
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => MainUploadFile()),
+        );
       }
       setState(() {
         _isAuthenticating = false;
@@ -201,8 +205,12 @@ class _EnterPinState extends State<EnterPin> {
                               getpin = pinController.text;
                               if (getpin == getpin1) {
                                 // Navigator.pushNamed(context, "/home");
-                                Navigator.pushReplacementNamed(
-                                    context, '/home');
+                                // Navigator.pushReplacementNamed(
+                                //     context, '/home');
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) => MainUploadFile()),
+                                );
                               }
                             }
                           },
