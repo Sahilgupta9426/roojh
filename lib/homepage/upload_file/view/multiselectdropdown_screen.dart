@@ -1,33 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
-import 'package:roojh/homepage/upload_file/controller/app_data_controller.dart';
-import 'package:roojh/homepage/upload_file/model/subject_data_model.dart';
 import 'package:roojh/homepage/upload_file/upload_main.dart';
+import 'dart:async';
 
-class MultiSelectDropDownScreen extends StatefulWidget {
-  MultiSelectDropDownScreen({Key? key}) : super(key: key);
+class TestForm extends StatefulWidget {
+  TestForm({Key? key}) : super(key: key);
 
   @override
-  State<MultiSelectDropDownScreen> createState() =>
-      _MultiSelectDropDownScreenState();
+  State<TestForm> createState() => _TestFormState();
 }
 
-class _MultiSelectDropDownScreenState extends State<MultiSelectDropDownScreen> {
-  final AppDataController controller = Get.put(AppDataController());
+class _TestFormState extends State<TestForm> {
+  DateTime selectedDate = DateTime.now();
+
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
-    List subjectData = [];
-
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      controller.getSubjectData();
-    });
+    String? selecTest;
 
     final summeryController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -63,62 +68,64 @@ class _MultiSelectDropDownScreenState extends State<MultiSelectDropDownScreen> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 7, bottom: 2),
-                        child: Text(
-                          'Document Type',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          padding: const EdgeInsets.only(left: 7, bottom: 2),
+                          child: Text(
+                            'Document Type',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          )),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: HexColor('#F3F6FF'),
+                        borderRadius: BorderRadius.circular(98),
+                        border: Border.all(color: HexColor('#CED3E1')),
+                        //   boxShadow: [
+                        //     BoxShadow(
+                        //       color: Color(0xffeeeeee),
+                        //       blurRadius: 10,
+                        //       offset: Offset(0, 4),
+                        //     ),
+                        //   ],
+                      ),
+                      height: 51,
+                      width: double.infinity,
+                      child: DropdownButton<String>(
+                        hint: Padding(
+                          padding:
+                              const EdgeInsets.only(left: 15.0, right: 200),
+                          child: selecTest == null
+                              ? Text('Document Type')
+                              : Text('$selecTest'),
                         ),
+                        items: <String>[
+                          'Lab',
+                          'Medication',
+                          'Vitals',
+                          'Problems',
+                          'Radiology',
+                          'Cardiology'
+                        ].map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String? value) {
+                          setState(() async {
+                            selecTest = await value!;
+                          });
+                        },
+
+                        // autofocus: true,
+                        value: selecTest,
                       ),
                     ),
-                    GetBuilder<AppDataController>(builder: (controller) {
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                            bottom: 30.0, top: 0, left: 0, right: 0),
-                        child: MultiSelectDialogField(
-                          items: controller.dropDownData,
-                          title: const Text(
-                            "Select Tests",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          selectedColor: Colors.black,
-                          decoration: BoxDecoration(
-                            color: HexColor('#F3F6FF'),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(25)),
-                            border: Border.all(
-                              color: HexColor('#CED3E1'),
-                              width: 1,
-                            ),
-                          ),
-                          buttonIcon: const Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.blue,
-                          ),
-                          buttonText: const Text(
-                            "   Document Type",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          onConfirm: (results) {
-                            subjectData = [];
-                            for (var i = 0; i < results.length; i++) {
-                              SubjectModel data = results[i] as SubjectModel;
-                              print(data.subjectId);
-                              print(data.subjectName);
-                              subjectData.add(data.subjectId);
-                            }
-                            print("data $subjectData");
-
-                            //_selectedAnimals = results;
-                          },
-                        ),
-                      );
-                    }),
+                    SizedBox(
+                      height: 30,
+                    ),
                     TextFormField(
                       minLines: null,
                       maxLines: 8,
@@ -161,7 +168,48 @@ class _MultiSelectDropDownScreenState extends State<MultiSelectDropDownScreen> {
                       },
                     ),
                     SizedBox(
-                      height: 50,
+                      height: 30,
+                    ),
+                    Container(
+                      height: 51,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: HexColor('#F3F6FF'),
+                        borderRadius: BorderRadius.circular(98),
+                        border: Border.all(color: HexColor('#CED3E1')),
+                        //   boxShadow: [
+                        //     BoxShadow(
+                        //       color: Color(0xffeeeeee),
+                        //       blurRadius: 10,
+                        //       offset: Offset(0, 4),
+                        //     ),
+                        //   ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: Text(
+                              "${selectedDate.toLocal()}".split(' ')[0],
+                              // style: TextStyle(fontSize: 15),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20.0,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 180),
+                            child: TextButton(
+                              onPressed: () => _selectDate(context),
+                              child: Text('Select date'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
                     ),
                     Container(
                       height: 51,
@@ -179,7 +227,9 @@ class _MultiSelectDropDownScreenState extends State<MultiSelectDropDownScreen> {
                               // side: BorderSide(color: Colors.red)
                             ))),
                         onPressed: () async {
-                          if (_formKey.currentState!.validate()) {}
+                          if (_formKey.currentState!.validate()) {
+                            print(selecTest);
+                          }
                         },
                         child: Align(
                           alignment: Alignment.center,

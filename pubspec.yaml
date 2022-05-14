@@ -47,6 +47,7 @@ dependencies:
   google_sign_in: ^5.0.3
   multi_select_flutter: ^4.1.2
   get:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
