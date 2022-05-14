@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:roojh/FirebaseAuth/Authenticattion.dart';
 
-//sign up form
+//sign up form ,email field ,password field and submit button
 class SignupField extends StatefulWidget {
   const SignupField({
     Key? key,
@@ -22,14 +22,16 @@ class _SignupFieldState extends State<SignupField> {
   final confirm_passwordController = TextEditingController();
   RegExp regex =
       RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
-  var userexist;
-  var notify;
+  var userexist; //to get user exist or not exist data
+  // var notify; //if user exist it will you for nitification on screen
   @override
   Widget build(BuildContext context) {
     return Form(
         key: _formKey,
         child: Column(
           children: [
+            // ##################################
+            // Email form field
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
@@ -90,16 +92,20 @@ class _SignupFieldState extends State<SignupField> {
                 },
               ),
             ),
-            Container(
-                padding: EdgeInsets.only(top: 5),
-                child: notify == 'User not confirmed in the system.' ||
-                        notify == 'Failed since user is not authorized.'
-                    ? const Text(
-                        'Email Already Exist',
-                        style: TextStyle(color: Colors.red),
-                      )
-                    : const SizedBox()),
+            // ##################################
+            // Notify when user already exist
+            // Container(
+            //     padding: EdgeInsets.only(top: 5),
+            //     child: notify == 'User not confirmed in the system.' ||
+            //             notify == 'Failed since user is not authorized.'
+            //         ? const Text(
+            //             'Email Already Exist',
+            //             style: TextStyle(color: Colors.red),
+            //           )
+            //         : const SizedBox()),
             const SizedBox(height: 10.49),
+            // ##################################
+            // Password field
             const Align(
               alignment: Alignment.centerLeft,
               child: Padding(
@@ -163,6 +169,8 @@ class _SignupFieldState extends State<SignupField> {
                 },
               ),
             ),
+            // ##################################
+            // confirm password form field
             SizedBox(height: 14.49),
             Align(
               alignment: Alignment.centerLeft,
@@ -227,6 +235,8 @@ class _SignupFieldState extends State<SignupField> {
               ),
             ),
             SizedBox(height: 20.64),
+            // ##################################
+            // Submit button
             Padding(
               padding: const EdgeInsets.only(left: 26, right: 25.35),
               child: Container(
@@ -235,9 +245,9 @@ class _SignupFieldState extends State<SignupField> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      userexist =
-                          await FireAuth().signUp(email, password, context);
-
+                      userexist = await FireAuth().signUp(email, password,
+                          context); //if user does not exist already then sign in will be successfull
+                      // if user exist then you will get a notification
                       if (userexist ==
                           'The email address is already in use by another account.') {
                         ScaffoldMessenger.of(context).showSnackBar(

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:roojh/Login_page/main_login.dart';
 
-//redirect to sign in page
+// ##############################################################
+//already have a account button which readirect in sign in page
 class AlreadyHaveAccount extends StatelessWidget {
   const AlreadyHaveAccount({
     Key? key,

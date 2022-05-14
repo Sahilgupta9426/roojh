@@ -5,6 +5,7 @@ import 'package:roojh/FirebaseAuth/Authenticattion.dart';
 
 import 'package:roojh/common_code/topImg.dart';
 
+//  home  page where you can see email name etc. of a user
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -23,6 +24,8 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: SingleChildScrollView(
         child: WillPopScope(
+          // ###############################################
+          // for double click to exit
           onWillPop: () async {
             final now = DateTime.now();
             final maxDuration = Duration(seconds: 2);

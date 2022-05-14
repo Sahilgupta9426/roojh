@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:roojh/homepage/upload_file/view/testForm.dart';
 
-import 'package:roojh/homepage/upload_file/view/multiselectdropdown_screen.dart';
-
+// ###################################
+// main page for upload file
 class MainUploadFile extends StatefulWidget {
   const MainUploadFile({Key? key}) : super(key: key);
 
@@ -17,31 +18,43 @@ class _MainUploadFileState extends State<MainUploadFile> {
     return Scaffold(
       body: SingleChildScrollView(
           child: Column(children: [
+        // ##################################
+        // Documents header
         Container(
           color: HexColor('#F3F6FF'),
           height: 98,
           child: Padding(
             padding: EdgeInsets.only(top: 27),
-            child: Row(children: [
-              TextButton(
-                  style: TextButton.styleFrom(padding: const EdgeInsets.all(0)),
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/home");
-                  },
-                  child: SvgPicture.asset('icons/arrow - right.svg')),
-              Container(
-                  width: 290,
-                  child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Documents',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w700),
-                      ))),
-            ]),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // ##################################
+                  // For exit button
+                  TextButton(
+                      style: TextButton.styleFrom(
+                          padding: const EdgeInsets.all(0)),
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/home");
+                      },
+                      child: SvgPicture.asset('icons/arrow - right.svg')),
+                  Container(
+                      // width: 290,
+                      child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Documents',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w700),
+                          ))),
+                  SizedBox(
+                    width: 50,
+                  )
+                ]),
           ),
         ),
-        SizedBox(height: 400),
+        SizedBox(height: 500),
+        // ##################################
+        // Upload More button
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
@@ -89,7 +102,7 @@ class _MainUploadFileState extends State<MainUploadFile> {
                         child: const Text(
                           'Upload more',
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w600),
+                              fontSize: 17, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ],

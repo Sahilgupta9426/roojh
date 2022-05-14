@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 import 'package:roojh/FirebaseAuth/Authenticattion.dart';
+import 'package:roojh/Login_page/forget_password_button.dart';
 
-//login form
+// #############################################
+//login form with email password and submit button
 class LoginField extends StatefulWidget {
   const LoginField({
     Key? key,
@@ -140,7 +142,7 @@ class _LoginFieldState extends State<LoginField> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ForgetPassButton() //in the bottom
+                  ForgetPassButton() // forget password button
                 ],
               ),
             ),
@@ -161,6 +163,8 @@ class _LoginFieldState extends State<LoginField> {
                       notify = await auth;
                       print(notify);
                     }
+                    // ########################################
+                    // get invalid password notification
                     if (notify ==
                         'The password is invalid or the user does not have a password.') {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -169,6 +173,8 @@ class _LoginFieldState extends State<LoginField> {
                             duration: Duration(seconds: 2),
                             content: Text('invalid password')),
                       );
+                      // ######################################################################
+                      // get email does not exist notification
                     } else if (notify ==
                         'There is no user record corresponding to this identifier. The user may have been deleted.') {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -196,26 +202,6 @@ class _LoginFieldState extends State<LoginField> {
               ),
             )
           ],
-        ));
-  }
-}
-
-class ForgetPassButton extends StatelessWidget {
-  const ForgetPassButton({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-        style: TextButton.styleFrom(padding: const EdgeInsets.all(0)),
-        onPressed: () {
-          Navigator.pushNamed(context, "/forgetPass");
-        },
-        child: Text(
-          'Forget Password?',
-          style: TextStyle(
-              fontSize: 15, fontWeight: FontWeight.w600, color: Colors.black),
         ));
   }
 }

@@ -33,6 +33,7 @@ class _StartPointState extends State<StartPoint> {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState) {
+              // ##############
               //check collection
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
@@ -40,11 +41,11 @@ class _StartPointState extends State<StartPoint> {
                 child: (Text('something went wrong')),
               );
             } else if (snapshot.hasData) {
-              // ###
+              // ################################################
               // if user is sign in it will redirect to Biometric Authentication
               return AuthPage();
             } else {
-              // ###
+              // #########################################
               //if user is not login it will redirect to Sign In page
               return SignIn(notify: '0');
             }

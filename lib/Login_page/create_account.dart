@@ -3,7 +3,8 @@ import 'package:hexcolor/hexcolor.dart';
 
 import '../Sign_up/main_sign_up.dart';
 
-//text button which redirect in 'sign up page'
+// #######################################
+//create account button which redirect in 'sign up page'
 class Create_Acoount extends StatelessWidget {
   const Create_Acoount({
     Key? key,

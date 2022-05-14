@@ -1,8 +1,12 @@
+// ignore_for_file: deprecated_member_use
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:roojh/homepage/upload_file/upload_main.dart';
 import 'dart:async';
+import 'package:flutter_document_picker/flutter_document_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class TestForm extends StatefulWidget {
   TestForm({Key? key}) : super(key: key);
@@ -12,6 +16,8 @@ class TestForm extends StatefulWidget {
 }
 
 class _TestFormState extends State<TestForm> {
+  // ##############################
+  //For Date form
   DateTime selectedDate = DateTime.now();
 
   Future<Null> _selectDate(BuildContext context) async {
@@ -58,6 +64,8 @@ class _TestFormState extends State<TestForm> {
                 padding: EdgeInsets.only(left: 24, right: 24),
                 child: Column(
                   children: [
+                    // ######################
+                    // upload ducumet heading
                     Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -65,6 +73,8 @@ class _TestFormState extends State<TestForm> {
                           style: TextStyle(fontSize: 19),
                         )),
                     SizedBox(height: 120),
+                    // ######################
+                    // Document type drop down form
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
@@ -78,6 +88,7 @@ class _TestFormState extends State<TestForm> {
                           )),
                     ),
                     Container(
+                      width: double.infinity,
                       decoration: BoxDecoration(
                         color: HexColor('#F3F6FF'),
                         borderRadius: BorderRadius.circular(98),
@@ -91,15 +102,14 @@ class _TestFormState extends State<TestForm> {
                         //   ],
                       ),
                       height: 51,
-                      width: double.infinity,
+                      padding: EdgeInsets.only(left: 18, right: 18),
+                      // width: double.infinity,
                       child: DropdownButton<String>(
-                        hint: Padding(
-                          padding:
-                              const EdgeInsets.only(left: 15.0, right: 200),
-                          child: selecTest == null
-                              ? Text('Document Type')
-                              : Text('$selecTest'),
-                        ),
+                        underline: Container(),
+                        isExpanded: true,
+                        hint: selecTest == null
+                            ? Text('Document Type')
+                            : Text('$selecTest'),
                         items: <String>[
                           'Lab',
                           'Medication',
@@ -126,6 +136,8 @@ class _TestFormState extends State<TestForm> {
                     SizedBox(
                       height: 30,
                     ),
+                    // #########################
+                    // For summery form
                     TextFormField(
                       minLines: null,
                       maxLines: 8,
@@ -170,6 +182,8 @@ class _TestFormState extends State<TestForm> {
                     SizedBox(
                       height: 30,
                     ),
+                    // ######################
+                    // Select date
                     Container(
                       height: 51,
                       width: double.infinity,
@@ -186,10 +200,11 @@ class _TestFormState extends State<TestForm> {
                         //   ],
                       ),
                       child: Row(
-                        mainAxisSize: MainAxisSize.min,
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.only(left: 15),
+                            padding: const EdgeInsets.only(left: 18),
                             child: Text(
                               "${selectedDate.toLocal()}".split(' ')[0],
                               // style: TextStyle(fontSize: 15),
@@ -199,7 +214,7 @@ class _TestFormState extends State<TestForm> {
                             height: 20.0,
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 180),
+                            padding: EdgeInsets.only(right: 18),
                             child: TextButton(
                               onPressed: () => _selectDate(context),
                               child: Text('Select date'),
@@ -211,6 +226,8 @@ class _TestFormState extends State<TestForm> {
                     SizedBox(
                       height: 30,
                     ),
+                    // ##################################
+                    // Submit button
                     Container(
                       height: 51,
                       // width: double.infinity,

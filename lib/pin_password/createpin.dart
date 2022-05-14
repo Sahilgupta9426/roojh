@@ -3,7 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:roojh/common_code/topImg.dart';
 import 'package:roojh/local_storage/local_storage.dart';
 
-// ###
+// ##################################
 //page for create pin
 class CreatePin extends StatefulWidget {
   const CreatePin({Key? key}) : super(key: key);
@@ -79,6 +79,8 @@ class _CreatePinState extends State<CreatePin> {
                             pin1 = pin1Controller.text;
                             pin2 = pin2Controller.text;
                             if (pin1 == pin2) {
+                              // #############################################################################
+                              //if pin1 and pin2 is equal then 4 digit pin password wil  create suceessfully otherwise it will get error
                               securestorage.writeSecureData('pin1', pin1);
                               final snackBar = SnackBar(
                                   content:

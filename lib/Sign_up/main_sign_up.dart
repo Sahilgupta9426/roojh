@@ -8,6 +8,8 @@ import '../common_code/login_with_buttons.dart';
 import '../common_code/or_login_with.dart';
 import 'already_have_account.dart';
 
+// ############################################################
+// main sign up page
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
 
@@ -16,7 +18,6 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  String radioButtonItem = 'ONE';
   Color radio_color = HexColor('#F46524');
   @override
   Widget build(BuildContext context) {

@@ -10,8 +10,8 @@ import 'package:roojh/local_storage/local_storage.dart';
 
 import '../common_code/topImg.dart';
 
-// ###
-// Biometric Athentication
+// #########################
+// Biometric Athentication like Facelock , figerprintlock
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);
 
@@ -20,28 +20,31 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-//old auth
-
-// end old auth
-
+  // #############################################
+  // create intance for local biometric authentication
   final LocalAuthentication auth = LocalAuthentication();
 
-  String _authorized = 'Not Authorized';
+  String _authorized = 'Not Authorized'; //defult not authrized
   bool _isAuthenticating = false;
-
+  // #########################################
+  // create function for authentication
   Future<void> _authenticate() async {
     bool authenticated = false;
     try {
+      // ##################################
+      // wait for authentication on screen
       setState(() {
         _isAuthenticating = true;
         _authorized = 'Authenticating';
       });
+
       authenticated = await auth.authenticate(
           localizedReason: 'Let OS determine authentication method',
           useErrorDialogs: true,
           stickyAuth: true);
       if (authenticated) {
-        // await Navigator.pushReplacementNamed(context, '/home');
+        // #################################################
+        // if authentication successful then it will redirect to Main upload file
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => MainUploadFile()),
         );
@@ -70,7 +73,8 @@ class _AuthPageState extends State<AuthPage> {
     setState(() => _isAuthenticating = false);
   }
 
-//check auth is available or not start
+// ###############################
+//check biometric authentication is available or not
   Future<bool> authenticateWithBiometrics() async {
     final LocalAuthentication localAuthentication = LocalAuthentication();
     bool isBiometricSupported = await localAuthentication.isDeviceSupported();
@@ -88,30 +92,24 @@ class _AuthPageState extends State<AuthPage> {
     return isAuthenticated;
   }
 
-  // ###
-  // local storage
-  // final LocalStorage secureStorage = LocalStorage();
-
   @override
   void initState() {
     super.initState();
-
+// ###############################
+// calling biometric authentication function
     _authenticate();
   }
-//check auth is available or not end
 
   @override
   Widget build(BuildContext context) {
     var getpin1 = '';
-
-    // secureStorage.readSecureData('pin1').then((value) => getpin1 = value);
-
+// enter pin password page
     return EnterPin();
   }
 }
 
-// ###
-// Pin Password AUthentication
+// ######################
+//4 Digit Pin Password AUthentication
 class EnterPin extends StatefulWidget {
   const EnterPin({Key? key}) : super(key: key);
 
@@ -127,15 +125,16 @@ class _EnterPinState extends State<EnterPin> {
 
   var getpin = "";
   final pinController = TextEditingController();
-  //form end
-  // local storage
+  // #######################################
+  // create secure local storage instance
   final LocalStorage secureStorage = LocalStorage();
-  // local storage end
+
   var getpin1 = '';
 
   void initState() {
     super.initState();
-
+    // ####################################################################################
+    //  to read pin password which is aready stored in local storage in order to compare with your enter password
     secureStorage.readSecureData('pin1').then((value) => getpin1 = value);
   }
 
