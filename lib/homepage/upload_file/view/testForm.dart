@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -16,6 +17,8 @@ class TestForm extends StatefulWidget {
 }
 
 class _TestFormState extends State<TestForm> {
+  String? selecTest;
+  final auth = FirebaseAuth.instance.currentUser;
   // ##############################
   //For Date form
   DateTime selectedDate = DateTime.now();
@@ -24,7 +27,7 @@ class _TestFormState extends State<TestForm> {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
+        firstDate: DateTime(2020, 8),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate)
       setState(() {
@@ -32,10 +35,36 @@ class _TestFormState extends State<TestForm> {
       });
   }
 
+  Future<firebase_storage.UploadTask?> uploadFile(File file) async {
+    if (file == null) {
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text("Unable to Upload")));
+      return null;
+    }
+
+    firebase_storage.UploadTask uploadTask;
+
+    // Create a Reference to the file
+    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('${auth?.email}')
+        .child('/$selecTest.pdf');
+
+    final metadata = firebase_storage.SettableMetadata(
+        contentType: 'file/pdf',
+        customMetadata: {'picked-file-path': file.path});
+    print("Uploading..!");
+
+    uploadTask = ref.putData(await file.readAsBytes(), metadata);
+
+    print("done..!");
+    return Future.value(uploadTask);
+  }
+
+  late File file;
+  firebase_storage.UploadTask? task;
   @override
   Widget build(BuildContext context) {
-    String? selecTest;
-
     final summeryController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
 
@@ -44,7 +73,7 @@ class _TestFormState extends State<TestForm> {
         child: Column(
           children: [
             SizedBox(
-              height: 20,
+              height: 28,
             ),
             Container(
               padding: EdgeInsets.only(right: 10),
@@ -72,7 +101,18 @@ class _TestFormState extends State<TestForm> {
                           'Upload Document',
                           style: TextStyle(fontSize: 19),
                         )),
-                    SizedBox(height: 120),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    TextButton(
+                        onPressed: () async {
+                          final path =
+                              await FlutterDocumentPicker.openDocument();
+                          print(path);
+                          file = await File(path!);
+                        },
+                        child: SvgPicture.asset('icons/fileupload2.svg')),
+                    SizedBox(height: 40),
                     // ######################
                     // Document type drop down form
                     Align(
@@ -177,6 +217,7 @@ class _TestFormState extends State<TestForm> {
                         if (val!.isEmpty) {
                           return 'Please Enter Summery';
                         }
+                        return null;
                       },
                     ),
                     SizedBox(
@@ -245,7 +286,10 @@ class _TestFormState extends State<TestForm> {
                             ))),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            print(selecTest);
+                            setState(() async {
+                              print(selecTest);
+                              task = await uploadFile(file);
+                            });
                           }
                         },
                         child: Align(
@@ -257,6 +301,9 @@ class _TestFormState extends State<TestForm> {
                           ),
                         ),
                       ),
+                    ),
+                    SizedBox(
+                      height: 30,
                     )
                   ],
                 ),

@@ -52,7 +52,7 @@ dependencies:
   flutter_document_picker: ^5.0.1-nullsafety.0 #pick document from local storage
   google_sign_in: ^5.0.3 #login with google
   get: # go one page to another page
-  # permission_handler: ^5.0.1
+  permission_handler: 
 dev_dependencies:
   flutter_test:
     sdk: flutter
