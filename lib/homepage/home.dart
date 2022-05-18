@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:roojh/FirebaseAuth/Authenticattion.dart';
 
 import 'package:roojh/common_code/topImg.dart';
+import 'package:roojh/homepage/upload_file/upload_main.dart';
 
 //  home  page where you can see email name etc. of a user
 class Home extends StatefulWidget {
@@ -54,7 +55,7 @@ class _HomeState extends State<Home> {
                 child: Column(
                   children: [
                     Text(
-                      'Hello ($user.email) ',
+                      'Hello ${user?.email}',
                       style: TextStyle(fontSize: 30),
                     ),
                     SizedBox(
@@ -67,7 +68,20 @@ class _HomeState extends State<Home> {
                           onPressed: () {
                             FireAuth().signout(context);
                           },
-                          child: Text('logout')),
+                          child: Text('Logout')),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Container(
+                      height: 40,
+                      width: MediaQuery.of(context).size.width,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => MainUploadFile()));
+                          },
+                          child: Text('Upload File')),
                     )
                   ],
                 ),

@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -49,7 +50,6 @@ class _TestFormState extends State<TestForm> {
         .ref()
         .child('${auth?.email}')
         .child('/$selecTest.pdf');
-
     final metadata = firebase_storage.SettableMetadata(
         contentType: 'file/pdf',
         customMetadata: {'picked-file-path': file.path});
@@ -63,6 +63,7 @@ class _TestFormState extends State<TestForm> {
 
   late File file;
   firebase_storage.UploadTask? task;
+  var fileLocation;
   @override
   Widget build(BuildContext context) {
     final summeryController = TextEditingController();
@@ -108,10 +109,12 @@ class _TestFormState extends State<TestForm> {
                         onPressed: () async {
                           final path =
                               await FlutterDocumentPicker.openDocument();
+
                           print(path);
                           file = await File(path!);
                         },
                         child: SvgPicture.asset('icons/fileupload2.svg')),
+
                     SizedBox(height: 40),
                     // ######################
                     // Document type drop down form
@@ -289,6 +292,11 @@ class _TestFormState extends State<TestForm> {
                             setState(() async {
                               print(selecTest);
                               task = await uploadFile(file);
+                              print(task);
+                              await task?.whenComplete(() async {
+                                // String imageUrl = await task?
+                                Navigator.pushNamed(context, '/home');
+                              });
                             });
                           }
                         },
