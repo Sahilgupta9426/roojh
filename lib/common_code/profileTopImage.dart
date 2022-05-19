@@ -9,7 +9,7 @@ class TopProfileImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(clipBehavior: Clip.none, children: [
       Container(
-        height: 225,
+        height: 230,
         decoration: BoxDecoration(
             color: HexColor('#204289'),
             borderRadius: BorderRadius.only(
@@ -17,37 +17,37 @@ class TopProfileImage extends StatelessWidget {
               bottomRight: Radius.circular(27.89),
             )),
       ),
-      Positioned(
-        top: 48,
-        child: Container(
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SvgPicture.asset(
-                      'svg_png/roojhWhite.svg',
-                      // height: 42,
-                      // width: 118,
+      Container(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 30,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SvgPicture.asset(
+                    'svg_png/roojhWhite.svg',
+                    // height: 42,
+                    // width: 118,
+                  ),
+                  // SizedBox(width: 250),
+                  SizedBox(
+                    width: 36,
+                    height: 36,
+                    child: CircleAvatar(
+                      radius: 48,
+                      // Image radius
+                      backgroundImage: NetworkImage(
+                          'https://source.unsplash.com/36x36/?girl'),
                     ),
-                    // SizedBox(width: 250),
-                    SizedBox(
-                      width: 36,
-                      height: 36,
-                      child: CircleAvatar(
-                        radius: 48,
-                        // Image radius
-                        backgroundImage: NetworkImage(
-                            'https://source.unsplash.com/36x36/?girl'),
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       Positioned(
@@ -55,18 +55,41 @@ class TopProfileImage extends StatelessWidget {
           child: Stack(
             children: [
               Container(
-                  width: MediaQuery.of(context).size.width,
-                  // width: double.infinity,
-                  height: 165,
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: SvgPicture.asset('svg_png/profileBackground.svg')),
+                width: MediaQuery.of(context).size.width,
+                // width: double.infinity,
+                height: 170,
+                padding: EdgeInsets.only(left: 20, right: 20, top: 0),
+                child: Container(
+                  padding: EdgeInsets.all(0),
+                  // height: 170,
+
+                  decoration: BoxDecoration(
+                      color: HexColor('#C4D0F1'),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(17),
+                      )),
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 133, right: 3),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.all(0),
+                              ),
+                              onPressed: () {},
+                              child: SvgPicture.asset('icons/addmember.svg')),
+                        ]),
+                  ),
+                ),
+              ),
               Positioned(
                   top: 10,
-                  left: 38,
+                  left: 30,
                   // bottom: -1,
                   child: Container(
-                    height: 148,
-                    width: 142,
+                    height: 154,
+                    width: 148,
                     decoration: BoxDecoration(
                         color: HexColor('#E4EBFF'),
                         borderRadius: BorderRadius.all(
@@ -92,7 +115,7 @@ class TopProfileImage extends StatelessWidget {
                       Text(
                         'Your Name',
                         style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 16),
+                            fontWeight: FontWeight.w600, fontSize: 15),
                       ),
                       SizedBox(
                         height: 3,
@@ -105,8 +128,9 @@ class TopProfileImage extends StatelessWidget {
                           onPressed: () async {},
                           child: const Text('View Profile',
                               style: TextStyle(
-                                  fontSize: 14,
-                                  color: Color.fromRGBO(244, 101, 36, 10))),
+                                  fontSize: 13,
+                                  color: Color.fromRGBO(32, 66, 137, 1),
+                                  fontWeight: FontWeight.w500)),
                           style: ButtonStyle(
                               foregroundColor: MaterialStateProperty.all<Color>(
                                   Colors.black),
