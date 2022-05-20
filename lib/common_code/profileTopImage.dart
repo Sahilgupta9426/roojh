@@ -21,7 +21,7 @@ class TopProfileImage extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(
-              height: 30,
+              height: 35,
             ),
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20),
@@ -58,7 +58,7 @@ class TopProfileImage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 // width: double.infinity,
                 height: 170,
-                padding: EdgeInsets.only(left: 20, right: 20, top: 0),
+                padding: EdgeInsets.only(left: 15, right: 15, top: 0),
                 child: Container(
                   padding: EdgeInsets.all(0),
                   // height: 170,
@@ -69,7 +69,7 @@ class TopProfileImage extends StatelessWidget {
                         Radius.circular(17),
                       )),
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 133, right: 3),
+                    padding: const EdgeInsets.only(bottom: 135, right: 7),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -84,12 +84,12 @@ class TopProfileImage extends StatelessWidget {
                 ),
               ),
               Positioned(
-                  top: 10,
-                  left: 30,
+                  top: 8,
+                  left: 25,
                   // bottom: -1,
                   child: Container(
-                    height: 154,
-                    width: 148,
+                    height: 155,
+                    width: 150,
                     decoration: BoxDecoration(
                         color: HexColor('#E4EBFF'),
                         borderRadius: BorderRadius.all(
