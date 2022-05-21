@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-import '../homepage/upload_file/mainUploadProfile.dart';
+import '../homepage/upload_file/mainUploadFiles.dart';
 
+// it's a bottum  navigation which will switch pages by click on buttons,Like main upload files,Trends page,Medication page,Reports page and Documents.
+// By default it will open by default mainuploadfiles
 class Footer extends StatefulWidget {
   const Footer({Key? key}) : super(key: key);
 
@@ -16,6 +18,7 @@ class _FooterState extends State<Footer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //navigation button
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.white,
@@ -51,7 +54,7 @@ class _FooterState extends State<Footer> {
             )
           ]),
       body: SingleChildScrollView(
-        child: UploadProfile(),
+        child: MainUploadFiles(),
       ),
     );
   }

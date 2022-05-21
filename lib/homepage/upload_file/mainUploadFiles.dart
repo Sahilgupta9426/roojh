@@ -6,103 +6,65 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:roojh/homepage/upload_file/upload_main.dart';
+import 'package:roojh/homepage/upload_file/view/moreUpload.dart';
 import '../../FirebaseAuth/firebase_storage/firebase_storage.dart';
 import '../../common_code/profileTopImage.dart';
 
-// class Footer extends StatefulWidget {
-//   const Footer({Key? key}) : super(key: key);
-
-//   @override
-//   State<Footer> createState() => _FooterState();
-// }
-
-// class _FooterState extends State<Footer> {
-//   int currentIndex = 0;
-//   bool onSelected = true;
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       bottomNavigationBar: BottomNavigationBar(
-//           type: BottomNavigationBarType.fixed,
-//           backgroundColor: Colors.white,
-//           // fixedColor: Colors.black,
-//           // iconSize: 35,
-
-//           selectedLabelStyle:
-//               TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
-//           selectedItemColor: HexColor('#204289'),
-//           showUnselectedLabels: false,
-//           currentIndex: currentIndex,
-//           onTap: (index) => setState(() => currentIndex = index),
-//           items: [
-//             BottomNavigationBarItem(
-//               icon: Icon(Icons.home_filled),
-//               label: 'Home',
-//             ),
-//             BottomNavigationBarItem(
-//               icon: Icon(Icons.health_and_safety_rounded),
-//               label: 'Trends',
-//             ),
-//             BottomNavigationBarItem(
-//               icon: Icon(Icons.medical_services),
-//               label: 'Medication',
-//             ),
-//             BottomNavigationBarItem(
-//               icon: Icon(Icons.biotech),
-//               label: 'Reports',
-//             ),
-//             BottomNavigationBarItem(
-//               icon: Icon(Icons.folder),
-//               label: 'Docs',
-//             )
-//           ]),
-//       body: SingleChildScrollView(
-//         child: UploadProfile(),
-//       ),
-//     );
-//   }
-// }
-
-class UploadProfile extends StatefulWidget {
-  const UploadProfile({
+// #######################################
+// main upload file page where you will upload pdf from library and capture image to upload firebase storage
+class MainUploadFiles extends StatefulWidget {
+  const MainUploadFiles({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<UploadProfile> createState() => _UploadProfileState();
+  State<MainUploadFiles> createState() => _MainUploadFilesState();
 }
 
-class _UploadProfileState extends State<UploadProfile> {
-  final user = FirebaseAuth.instance.currentUser;
-  FirebaseStorage _storageRef = FirebaseStorage.instance;
+class _MainUploadFilesState extends State<MainUploadFiles> {
+  final user = FirebaseAuth.instance.currentUser; // get user details
+  FirebaseStorage _storageRef =
+      FirebaseStorage.instance; //firebase storage intance
+  // ##############################
+  // this function provide to get image by capture through mobile camera
   late File _image;
   Future getImage() async {
     var image = await ImagePicker().pickImage(source: ImageSource.camera);
+    // if image is not selected then it will return null
     if (image == null) return;
-    var filename = image.name;
-    print('file name--- $filename');
-    final imageTemporary = await File(image.path);
-    print('file name--- $imageTemporary');
-    setState(() {
-      this._image = imageTemporary;
-    });
+    // ###########################
+    // if image captured
+    var filename = image.name; //get image name
+    // print('file name--- $filename');
+    // final imageTemporary = await File(image.path);
+    // print('file name--- $imageTemporary');
+    // setState(() {
+    //   // this._image = imageTemporary;
+    // });
+
     if (image != null) {
-      print('file name_____--- $_image');
+      // ############################
+      //upload image function called after capturing image
       await uploadImage(image);
     }
   }
 
+// ##############################
+// this function upload the image after capturing the image
   Future<void> uploadImage(XFile _image) async {
     Reference reference =
         _storageRef.ref().child('${user?.email}').child(_image.name);
     UploadTask uploadTask = reference.putFile(File(_image.path));
+    // ################################################
+    // it will show uploading notification on screen
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
           backgroundColor: Colors.black,
           duration: Duration(seconds: 5),
           content: Text('Uploading')),
     );
+    // ##################################
+    // when upload is successful then it will show a notification that upload successful
     await uploadTask.whenComplete(() {
       print(reference.getDownloadURL());
       ScaffoldMessenger.of(context).showSnackBar(
@@ -117,7 +79,7 @@ class _UploadProfileState extends State<UploadProfile> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      TopProfileImage(),
+      TopProfileImage(), //it wil show user picture and name which is in common code folder
       Column(
         children: [
           SizedBox(
@@ -144,18 +106,19 @@ class _UploadProfileState extends State<UploadProfile> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  // ############################
+                  // File upload button
                   TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => MainUploadFile()));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => MoreUploads()));
                       },
                       child: SvgPicture.asset('icons/fileupload2.svg')),
-                  // SizedBox(
-                  //   width: 18,
-                  // ),
+                  // ############################
+                  // Capture image button
                   TextButton(
                       onPressed: () async {
-                        await getImage();
+                        await getImage(); //calling getimage function which will capture image and ulpad to storage
                       },
                       child: SvgPicture.asset('icons/uploadImage.svg'))
                 ],
@@ -165,7 +128,6 @@ class _UploadProfileState extends State<UploadProfile> {
           SizedBox(
             height: 129,
           ),
-          // Image.file(_image),
           Container(
             height: 51.8,
             width: MediaQuery.of(context).size.width,

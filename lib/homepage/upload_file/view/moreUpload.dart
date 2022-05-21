@@ -5,14 +5,14 @@ import 'package:roojh/homepage/upload_file/view/testForm.dart';
 
 // ###################################
 // main page for upload file
-class MainUploadFile extends StatefulWidget {
-  const MainUploadFile({Key? key}) : super(key: key);
+class MoreUploads extends StatefulWidget {
+  const MoreUploads({Key? key}) : super(key: key);
 
   @override
-  State<MainUploadFile> createState() => _MainUploadFileState();
+  State<MoreUploads> createState() => _MoreUploadsState();
 }
 
-class _MainUploadFileState extends State<MainUploadFile> {
+class _MoreUploadsState extends State<MoreUploads> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

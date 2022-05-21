@@ -7,8 +7,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:roojh/FirebaseAuth/firebase_storage/firebase_storage.dart';
+import 'package:roojh/homepage/upload_file/mainUploadFiles.dart';
 
-import 'package:roojh/homepage/upload_file/upload_main.dart';
+import 'package:roojh/homepage/upload_file/view/moreUpload.dart';
 import 'dart:async';
 import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -66,7 +67,7 @@ class _TestFormState extends State<TestForm> {
                     child: SvgPicture.asset('icons/exitCross.svg'),
                     onPressed: () {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => MainUploadFile()));
+                          builder: (context) => MoreUploads()));
                     },
                   )),
             ),
@@ -299,7 +300,7 @@ class _TestFormState extends State<TestForm> {
                               'uid': auth?.uid
                             }).then((value) => Navigator.of(context)
                                 .pushReplacement(MaterialPageRoute(
-                                    builder: (context) => MainUploadFile())));
+                                    builder: (context) => MoreUploads())));
                           }
                         },
                         child: Align(

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:roojh/FirebaseAuth/Authenticattion.dart';
 import 'package:roojh/common_code/footer.dart';
 import 'package:roojh/common_code/topImg.dart';
-import 'package:roojh/homepage/upload_file/upload_main.dart';
+import 'package:roojh/homepage/upload_file/view/moreUpload.dart';
 
-import 'upload_file/mainUploadProfile.dart';
+import 'upload_file/mainUploadFiles.dart';
 
 //  home  page where you can see email name etc. of a user
 class Home extends StatefulWidget {
@@ -80,7 +80,7 @@ class _HomeState extends State<Home> {
                       child: ElevatedButton(
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => MainUploadFile()));
+                                builder: (context) => MainUploadFiles()));
                           },
                           child: Text('Upload File')),
                     ),

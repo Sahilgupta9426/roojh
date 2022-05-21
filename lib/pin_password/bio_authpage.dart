@@ -4,12 +4,14 @@ import 'package:hexcolor/hexcolor.dart';
 
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:roojh/common_code/footer.dart';
 import 'package:roojh/homepage/home.dart';
-import 'package:roojh/homepage/upload_file/upload_main.dart';
+import 'package:roojh/homepage/upload_file/view/moreUpload.dart';
 // import 'package:roojh/homepage/createpin.dart';
 import 'package:roojh/local_storage/local_storage.dart';
 
 import '../common_code/topImg.dart';
+import '../homepage/upload_file/mainUploadFiles.dart';
 
 // #########################
 // Biometric Athentication like Facelock , figerprintlock
@@ -47,7 +49,7 @@ class _AuthPageState extends State<AuthPage> {
         // #################################################
         // if authentication successful then it will redirect to Main upload file
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => Home()),
+          MaterialPageRoute(builder: (context) => Footer()),
         );
       }
       setState(() {
@@ -209,7 +211,7 @@ class _EnterPinState extends State<EnterPin> {
                                 //     context, '/home');
                                 Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
-                                      builder: (context) => Home()),
+                                      builder: (context) => Footer()),
                                 );
                               }
                             }
