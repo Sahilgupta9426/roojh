@@ -67,7 +67,7 @@ class _TestFormState extends State<TestForm> {
                     child: SvgPicture.asset('icons/exitCross.svg'),
                     onPressed: () {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => MoreUploads()));
+                          builder: (context) => UploadFileList()));
                     },
                   )),
             ),
@@ -300,7 +300,7 @@ class _TestFormState extends State<TestForm> {
                               'uid': auth?.uid
                             }).then((value) => Navigator.of(context)
                                 .pushReplacement(MaterialPageRoute(
-                                    builder: (context) => MoreUploads())));
+                                    builder: (context) => UploadFileList())));
                           }
                         },
                         child: Align(

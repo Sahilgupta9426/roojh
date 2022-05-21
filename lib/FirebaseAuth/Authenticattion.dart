@@ -18,7 +18,7 @@ class FireAuth {
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) async {
         user = _auth.currentUser?.email;
-        // if user's email is not authenticate then it will send authentication email which will confirm the email
+        // if user's email is not authenticate then it will send verification email which will confirm the email
         if (!_auth.currentUser!.emailVerified) {
           await _auth.currentUser?.sendEmailVerification();
           // redirect to the verifyemail page if user's email not confirmed

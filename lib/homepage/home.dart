@@ -80,7 +80,7 @@ class _HomeState extends State<Home> {
                       child: ElevatedButton(
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => MainUploadFiles()));
+                                builder: (context) => UploadFileList()));
                           },
                           child: Text('Upload File')),
                     ),

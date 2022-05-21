@@ -111,7 +111,7 @@ class _MainUploadFilesState extends State<MainUploadFiles> {
                   TextButton(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => MoreUploads()));
+                            builder: (context) => UploadFileList()));
                       },
                       child: SvgPicture.asset('icons/fileupload2.svg')),
                   // ############################
