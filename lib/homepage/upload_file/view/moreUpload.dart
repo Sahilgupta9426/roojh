@@ -1,11 +1,16 @@
 import 'dart:io';
-
+import 'dart:typed_data';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:roojh/homepage/upload_file/view/testForm.dart';
+import 'package:firebase_core/firebase_core.dart' as firebase_core;
 
 // ###################################
 // main page for upload file
@@ -17,7 +22,11 @@ class UploadFileList extends StatefulWidget {
 }
 
 class _UploadFileListState extends State<UploadFileList> {
-  double progress = 0;
+  late File file;
+  var path;
+  late String fileName;
+  final auth = FirebaseAuth.instance.currentUser;
+  double progress = 0.0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,6 +70,50 @@ class _UploadFileListState extends State<UploadFileList> {
         SizedBox(
           height: 50,
         ),
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: () async {
+                  final result = await FilePicker.platform.pickFiles(
+                      allowMultiple: false,
+                      type: FileType.custom,
+                      allowedExtensions: ['pdf']);
+
+                  if (result != null) {
+                    // Uint8List? file = result.files.first.bytes;
+                    path = result.files.single.path;
+                    fileName = result.files.first.name;
+                    print('file name-0000 $fileName');
+                    File file = await File(path!);
+                    UploadTask? task = FirebaseStorage.instance
+                        .ref()
+                        .child('${auth?.email}')
+                        .child('/selectTest.pdf')
+                        .putData(file.readAsBytesSync());
+                    print('--------------------$task');
+                    task.snapshotEvents.listen((event) {
+                      setState(() {
+                        progress = ((event.bytesTransferred.toDouble() /
+                                    event.totalBytes.toDouble()) *
+                                100)
+                            .roundToDouble();
+
+                        print(progress);
+                      });
+                    });
+                    task.whenComplete(() => null);
+                  }
+                },
+                child: Text("Upload"),
+              ),
+              // SizedBox(
+              //   height: 50.0,
+              // ),
+            ],
+          ),
+        ),
         Padding(
           padding: EdgeInsets.only(left: 26, right: 26),
           child: Container(
@@ -91,10 +144,11 @@ class _UploadFileListState extends State<UploadFileList> {
                             SizedBox(
                               width: 138,
                             ),
-                            Text('7mb/23mb')
+                            Text('$progress')
                           ],
                         ),
                       ),
+                      SizedBox(height: 7),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Align(
@@ -102,7 +156,7 @@ class _UploadFileListState extends State<UploadFileList> {
                           child: Container(
                             width: 240,
                             child: LinearProgressIndicator(
-                              // value: progress,
+                              value: progress / 100,
                               // valueColor: AlwaysStoppedAnimation(Colors.green),
                               backgroundColor: Colors.white,
                               color: HexColor('#204289'),

@@ -53,10 +53,11 @@ dependencies:
   google_sign_in: ^5.0.3 #login with google
   get: # go one page to another page
 
-  file_picker: ^4.5.1
+  file_picker: ^3.0.3
   image_picker: ^0.8.5+3
   path_provider: ^2.0.10
   http: ^0.13.1
+  firebase_messaging: ^11.4.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
