@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:roojh/FirebaseAuth/firebase_storage/firebase_storage.dart';
 import 'package:roojh/homepage/upload_file/mainUploadFiles.dart';
-
 import 'package:roojh/homepage/upload_file/view/moreUpload.dart';
 import 'dart:async';
 import 'package:flutter_document_picker/flutter_document_picker.dart';
@@ -23,9 +22,6 @@ class TestForm extends StatefulWidget {
 }
 
 class _TestFormState extends State<TestForm> {
-  var path;
-  var filename;
-  // StorageFirebase storage = StorageFirebase();
   String? selecTest;
   final auth = FirebaseAuth.instance.currentUser;
   // ##############################
@@ -44,14 +40,15 @@ class _TestFormState extends State<TestForm> {
       });
   }
 
+  var fileName;
+  var fileName2;
+  var filePath;
   late File file;
-  firebase_storage.UploadTask? task;
-  var fileLocation;
   @override
   Widget build(BuildContext context) {
     final summeryController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
-
+    FilePickerResult? getFile;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -66,8 +63,10 @@ class _TestFormState extends State<TestForm> {
                   child: TextButton(
                     child: SvgPicture.asset('icons/exitCross.svg'),
                     onPressed: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => UploadFileList()));
+                      if (fileName != null && filePath != null) {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => UploadFileList()));
+                      }
                     },
                   )),
             ),
@@ -90,23 +89,21 @@ class _TestFormState extends State<TestForm> {
                     ),
                     TextButton(
                         onPressed: () async {
-                          final getfile = await FilePicker.platform.pickFiles(
+                          getFile = await FilePicker.platform.pickFiles(
                               allowMultiple: false,
                               type: FileType.custom,
                               allowedExtensions: ['pdf']);
-                          if (getfile == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('No file selected')));
-                            return null;
-                          }
-                          setState(() {
-                            path = getfile.files.single.path;
-                            filename = getfile.files.single.name;
+                          print(getFile);
+                          setState(() async {
+                            fileName = await getFile!.files.single.name;
+                            fileName2 = await getFile!.files.first.name; //test
+                            filePath = await getFile!.files.single.path;
+                            file = await File(filePath!);
                           });
                         },
                         child: SvgPicture.asset('icons/fileupload2.svg')),
                     Center(
-                      child: filename != null ? Text(filename) : SizedBox(),
+                      child: fileName != null ? Text(fileName) : SizedBox(),
                     ),
 
                     SizedBox(height: 40),
@@ -288,19 +285,20 @@ class _TestFormState extends State<TestForm> {
                             print(selecTest);
                             var email = auth?.email;
                             // task = await uploadFile(file);
-
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => UploadFileList()));
                             // var result = await storage.uploadFile(
                             //     path, filename, selecTest, email);
-                            await FireStoreDatabase().users.add({
-                              'summery': summery,
-                              // 'pdfUrl': result,
-                              'date': selectedDate,
-                              'documentType': selecTest,
-                              'email': auth?.email,
-                              'uid': auth?.uid
-                            }).then((value) => Navigator.of(context)
-                                .pushReplacement(MaterialPageRoute(
-                                    builder: (context) => UploadFileList())));
+                            // await FireStoreDatabase().users.add({
+                            //   'summery': summery,
+                            //   // 'pdfUrl': result,
+                            //   'date': selectedDate,
+                            //   'documentType': selecTest,
+                            //   'email': auth?.email,
+                            //   'uid': auth?.uid
+                            // }).then((value) => Navigator.of(context)
+                            //     .pushReplacement(MaterialPageRoute(
+                            //         builder: (context) => UploadFileList())));
                           }
                         },
                         child: Align(

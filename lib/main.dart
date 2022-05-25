@@ -4,19 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:roojh/Sign_up/main_sign_up.dart';
-import 'package:roojh/homepage/home.dart';
+
 import 'package:roojh/pin_password/bio_authpage.dart';
 import 'package:roojh/pin_password/createpin.dart';
 import 'Login_page/main_login.dart';
 import 'forget_password/main_forgetpassword.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-}
 
 Future<void> main() async {
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(StartPoint());
@@ -40,7 +34,7 @@ class _StartPointState extends State<StartPoint> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState) {
               // ##############
-              //check collection
+              //check internet collection
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(
@@ -64,7 +58,6 @@ class _StartPointState extends State<StartPoint> {
           "/login": (context) => SignIn(notify: '0'),
           "/forgetPass": (context) => ForgetPassword(),
           "/signup": (context) => SignUp(),
-          "/home": (context) => Home(),
           "/auth": (context) => AuthPage(),
           "/createpin": (context) => CreatePin(),
         });

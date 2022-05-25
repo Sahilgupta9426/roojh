@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class MainUploadFiles extends StatefulWidget {
 }
 
 class _MainUploadFilesState extends State<MainUploadFiles> {
+  FilePickerResult? getFile;
   final user = FirebaseAuth.instance.currentUser; // get user details
   FirebaseStorage _storageRef =
       FirebaseStorage.instance; //firebase storage intance
@@ -110,6 +112,8 @@ class _MainUploadFilesState extends State<MainUploadFiles> {
                   // File upload button
                   TextButton(
                       onPressed: () {
+                        File file = File('fg');
+
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => UploadFileList()));
                       },

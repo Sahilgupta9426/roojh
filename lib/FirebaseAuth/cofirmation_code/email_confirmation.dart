@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:roojh/FirebaseAuth/Authenticattion.dart';
 import 'package:roojh/common_code/topImg.dart';
-import 'package:roojh/homepage/home.dart';
 
 class VerifyEmail extends StatefulWidget {
   const VerifyEmail({Key? key}) : super(key: key);

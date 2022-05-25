@@ -1,32 +1,31 @@
 import 'dart:io';
-import 'dart:typed_data';
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:roojh/homepage/upload_file/view/testForm.dart';
-import 'package:firebase_core/firebase_core.dart' as firebase_core;
 
 // ###################################
 // main page for upload file
 class UploadFileList extends StatefulWidget {
-  const UploadFileList({Key? key}) : super(key: key);
+  UploadFileList({Key? key}) : super(key: key);
 
   @override
   State<UploadFileList> createState() => _UploadFileListState();
 }
 
 class _UploadFileListState extends State<UploadFileList> {
-  late File file;
   var path;
-  late String fileName;
+
   final auth = FirebaseAuth.instance.currentUser;
   double progress = 0.0;
+  // Future<void> getFile() async {
+
+  // }
+  var fileName;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,9 +46,7 @@ class _UploadFileListState extends State<UploadFileList> {
                   TextButton(
                       style: TextButton.styleFrom(
                           padding: const EdgeInsets.all(0)),
-                      onPressed: () {
-                        Navigator.pushNamed(context, "/home");
-                      },
+                      onPressed: () {},
                       child: SvgPicture.asset('icons/arrow - right.svg')),
                   Container(
                       // width: 290,
@@ -76,21 +73,27 @@ class _UploadFileListState extends State<UploadFileList> {
             children: [
               TextButton(
                 onPressed: () async {
-                  final result = await FilePicker.platform.pickFiles(
-                      allowMultiple: false,
-                      type: FileType.custom,
-                      allowedExtensions: ['pdf']);
+                  // await getFile();
+                  FilePickerResult? getFile = await FilePicker.platform
+                      .pickFiles(
+                          allowMultiple: false,
+                          type: FileType.custom,
+                          allowedExtensions: ['pdf']);
 
-                  if (result != null) {
-                    // Uint8List? file = result.files.first.bytes;
-                    path = result.files.single.path;
-                    fileName = result.files.first.name;
+                  if (getFile != null) {
+                    // Uint8List? file = getFile.files.first.bytes;
+
+                    path = getFile.files.single.path;
+
+                    fileName = getFile.files.first.name;
+
+                    // fileName = getFile.files.first.name;
                     print('file name-0000 $fileName');
                     File file = await File(path!);
                     UploadTask? task = FirebaseStorage.instance
                         .ref()
                         .child('${auth?.email}')
-                        .child('/selectTest.pdf')
+                        .child('/${fileName}')
                         .putData(file.readAsBytesSync());
                     print('--------------------$task');
                     task.snapshotEvents.listen((event) {
@@ -114,63 +117,70 @@ class _UploadFileListState extends State<UploadFileList> {
             ],
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(left: 26, right: 26),
-          child: Container(
-              height: 66,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  color: HexColor('#F3F6FF'),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  )),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, top: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Doc1',
-                              style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                  fontStyle: FontStyle.normal),
-                            ),
-                            SizedBox(
-                              width: 138,
-                            ),
-                            Text('$progress')
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 7),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Container(
-                            width: 240,
-                            child: LinearProgressIndicator(
-                              value: progress / 100,
-                              // valueColor: AlwaysStoppedAnimation(Colors.green),
-                              backgroundColor: Colors.white,
-                              color: HexColor('#204289'),
-                            ),
+        Container(
+          child: fileName != null
+              ? Padding(
+                  padding: EdgeInsets.only(left: 26, right: 26),
+                  child: Container(
+                      height: 66,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: HexColor('#F3F6FF'),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          )),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, top: 10),
+                                child: Row(
+                                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    SizedBox(
+                                      width: 200,
+                                      child: Text(
+                                        '$fileName',
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w500,
+                                            fontStyle: FontStyle.normal),
+                                      ),
+                                    ),
+                                    // SizedBox(
+                                    //   width: 138,
+                                    // ),
+                                    Text('$progress')
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 7),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Container(
+                                    width: 240,
+                                    child: LinearProgressIndicator(
+                                      value: progress / 100,
+                                      // valueColor: AlwaysStoppedAnimation(Colors.green),
+                                      backgroundColor: Colors.white,
+                                      color: HexColor('#204289'),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Container(
-                    child: SvgPicture.asset('icons/cross.svg'),
-                  )
-                ],
-              )),
+                          Container(
+                            child: SvgPicture.asset('icons/cross.svg'),
+                          )
+                        ],
+                      )))
+              : SizedBox(),
         ),
         SizedBox(
           height: 300,
