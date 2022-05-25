@@ -8,7 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:roojh/homepage/upload_file/view/moreUpload.dart';
-import '../../FirebaseAuth/firebase_storage/firebase_storage.dart';
+
 import '../../common_code/profileTopImage.dart';
 
 // #######################################
@@ -112,8 +112,6 @@ class _MainUploadFilesState extends State<MainUploadFiles> {
                   // File upload button
                   TextButton(
                       onPressed: () {
-                        File file = File('fg');
-
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => UploadFileList()));
                       },

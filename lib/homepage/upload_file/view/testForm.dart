@@ -48,7 +48,7 @@ class _TestFormState extends State<TestForm> {
   Widget build(BuildContext context) {
     final summeryController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
-    FilePickerResult? getFile;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -65,7 +65,9 @@ class _TestFormState extends State<TestForm> {
                     onPressed: () {
                       if (fileName != null && filePath != null) {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => UploadFileList()));
+                            builder: (context) => UploadFileList(
+                                  fileName: null,
+                                )));
                       }
                     },
                   )),
@@ -89,15 +91,16 @@ class _TestFormState extends State<TestForm> {
                     ),
                     TextButton(
                         onPressed: () async {
-                          getFile = await FilePicker.platform.pickFiles(
-                              allowMultiple: false,
-                              type: FileType.custom,
-                              allowedExtensions: ['pdf']);
+                          FilePickerResult? getFile = await FilePicker.platform
+                              .pickFiles(
+                                  allowMultiple: false,
+                                  type: FileType.custom,
+                                  allowedExtensions: ['pdf']);
                           print(getFile);
                           setState(() async {
                             fileName = await getFile!.files.single.name;
-                            fileName2 = await getFile!.files.first.name; //test
-                            filePath = await getFile!.files.single.path;
+                            // fileName2 = await getFile!.files.first.name; //test
+                            filePath = await getFile.files.single.path;
                             file = await File(filePath!);
                           });
                         },
@@ -158,8 +161,8 @@ class _TestFormState extends State<TestForm> {
                           );
                         }).toList(),
                         onChanged: (String? value) {
-                          setState(() async {
-                            selecTest = await value!;
+                          setState(() {
+                            selecTest = value!;
                           });
                         },
 
@@ -278,7 +281,7 @@ class _TestFormState extends State<TestForm> {
 
                               // side: BorderSide(color: Colors.red)
                             ))),
-                        onPressed: () async {
+                        onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             var summery = summeryController.text;
 
@@ -286,7 +289,11 @@ class _TestFormState extends State<TestForm> {
                             var email = auth?.email;
                             // task = await uploadFile(file);
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => UploadFileList()));
+                                builder: (context) => UploadFileList(
+                                    fileName: fileName,
+                                    path: filePath,
+                                    selecTest: selecTest,
+                                    date: selectedDate)));
                             // var result = await storage.uploadFile(
                             //     path, filename, selecTest, email);
                             // await FireStoreDatabase().users.add({

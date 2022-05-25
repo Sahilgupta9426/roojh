@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:file_picker/file_picker.dart';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,21 +11,55 @@ import 'package:roojh/homepage/upload_file/view/testForm.dart';
 // ###################################
 // main page for upload file
 class UploadFileList extends StatefulWidget {
-  UploadFileList({Key? key}) : super(key: key);
+  var fileName;
+  var path;
+  String? selecTest;
+  DateTime? date;
+  UploadFileList(
+      {Key? key,
+      this.fileName,
+      this.path,
+      String? this.selecTest,
+      DateTime? this.date})
+      : super(key: key);
 
   @override
   State<UploadFileList> createState() => _UploadFileListState();
 }
 
 class _UploadFileListState extends State<UploadFileList> {
-  var path;
-
   final auth = FirebaseAuth.instance.currentUser;
   double progress = 0.0;
-  // Future<void> getFile() async {
+  Future<void> getFile() async {
+    print('file name-0000 ${widget.fileName}');
+    File file = await File(widget.path!);
+    print('file path $file');
+    UploadTask? task = FirebaseStorage.instance
+        .ref()
+        .child('${auth?.email}')
+        .child('/${widget.selecTest! + widget.fileName}')
+        .putData(file.readAsBytesSync());
+    print('--------------------$task');
+    task.snapshotEvents.listen((event) {
+      setState(() {
+        progress =
+            ((event.bytesTransferred.toDouble() / event.totalBytes.toDouble()) *
+                    100)
+                .roundToDouble();
 
-  // }
-  var fileName;
+        print(progress);
+      });
+    });
+    task.whenComplete(() => null);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getFile();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,58 +101,9 @@ class _UploadFileListState extends State<UploadFileList> {
         SizedBox(
           height: 50,
         ),
-        Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextButton(
-                onPressed: () async {
-                  // await getFile();
-                  FilePickerResult? getFile = await FilePicker.platform
-                      .pickFiles(
-                          allowMultiple: false,
-                          type: FileType.custom,
-                          allowedExtensions: ['pdf']);
 
-                  if (getFile != null) {
-                    // Uint8List? file = getFile.files.first.bytes;
-
-                    path = getFile.files.single.path;
-
-                    fileName = getFile.files.first.name;
-
-                    // fileName = getFile.files.first.name;
-                    print('file name-0000 $fileName');
-                    File file = await File(path!);
-                    UploadTask? task = FirebaseStorage.instance
-                        .ref()
-                        .child('${auth?.email}')
-                        .child('/${fileName}')
-                        .putData(file.readAsBytesSync());
-                    print('--------------------$task');
-                    task.snapshotEvents.listen((event) {
-                      setState(() {
-                        progress = ((event.bytesTransferred.toDouble() /
-                                    event.totalBytes.toDouble()) *
-                                100)
-                            .roundToDouble();
-
-                        print(progress);
-                      });
-                    });
-                    task.whenComplete(() => null);
-                  }
-                },
-                child: Text("Upload"),
-              ),
-              // SizedBox(
-              //   height: 50.0,
-              // ),
-            ],
-          ),
-        ),
         Container(
-          child: fileName != null
+          child: widget.fileName != null
               ? Padding(
                   padding: EdgeInsets.only(left: 26, right: 26),
                   child: Container(
@@ -143,7 +128,7 @@ class _UploadFileListState extends State<UploadFileList> {
                                     SizedBox(
                                       width: 200,
                                       child: Text(
-                                        '$fileName',
+                                        '${widget.fileName}',
                                         style: TextStyle(
                                             fontSize: 13,
                                             fontWeight: FontWeight.w500,
