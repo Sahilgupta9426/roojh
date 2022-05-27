@@ -40,9 +40,9 @@ class _TestFormState extends State<TestForm> {
       });
   }
 
-  var fileName;
-  var fileName2;
-  var filePath;
+  List<File>? fileNames;
+
+  List<File>? filePaths;
   late File file;
   @override
   Widget build(BuildContext context) {
@@ -63,11 +63,9 @@ class _TestFormState extends State<TestForm> {
                   child: TextButton(
                     child: SvgPicture.asset('icons/exitCross.svg'),
                     onPressed: () {
-                      if (fileName != null && filePath != null) {
+                      if (fileNames != null && filePaths != null) {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => UploadFileList(
-                                  fileName: null,
-                                )));
+                            builder: (context) => UploadFileList()));
                       }
                     },
                   )),
@@ -93,20 +91,26 @@ class _TestFormState extends State<TestForm> {
                         onPressed: () async {
                           FilePickerResult? getFile = await FilePicker.platform
                               .pickFiles(
-                                  allowMultiple: false,
+                                  allowMultiple: true,
                                   type: FileType.custom,
                                   allowedExtensions: ['pdf']);
                           print(getFile);
                           setState(() async {
-                            fileName = await getFile!.files.single.name;
+                            filePaths = await getFile!.paths
+                                .map((path) => File(path!))
+                                .toList();
                             // fileName2 = await getFile!.files.first.name; //test
-                            filePath = await getFile.files.single.path;
-                            file = await File(filePath!);
+                            fileNames = await getFile.names
+                                .map((name) => File(name!))
+                                .toList();
+                            // file = await File(filePath!);
                           });
                         },
                         child: SvgPicture.asset('icons/fileupload2.svg')),
                     Center(
-                      child: fileName != null ? Text(fileName) : SizedBox(),
+                      child: fileNames != null
+                          ? Text(fileNames.toString())
+                          : SizedBox(),
                     ),
 
                     SizedBox(height: 40),
@@ -130,13 +134,6 @@ class _TestFormState extends State<TestForm> {
                         color: HexColor('#F3F6FF'),
                         borderRadius: BorderRadius.circular(98),
                         border: Border.all(color: HexColor('#CED3E1')),
-                        //   boxShadow: [
-                        //     BoxShadow(
-                        //       color: Color(0xffeeeeee),
-                        //       blurRadius: 10,
-                        //       offset: Offset(0, 4),
-                        //     ),
-                        //   ],
                       ),
                       height: 51,
                       padding: EdgeInsets.only(left: 18, right: 18),
@@ -290,8 +287,8 @@ class _TestFormState extends State<TestForm> {
                             // task = await uploadFile(file);
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => UploadFileList(
-                                    fileName: fileName,
-                                    path: filePath,
+                                    fileNames: fileNames,
+                                    paths: filePaths,
                                     selecTest: selecTest,
                                     date: selectedDate)));
                             // var result = await storage.uploadFile(

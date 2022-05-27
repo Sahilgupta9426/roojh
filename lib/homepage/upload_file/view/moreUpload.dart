@@ -11,17 +11,17 @@ import 'package:roojh/homepage/upload_file/view/testForm.dart';
 // ###################################
 // main page for upload file
 class UploadFileList extends StatefulWidget {
-  var fileName;
-  var path;
+  List<File>? fileNames;
+  List<File>? paths;
   String? selecTest;
   DateTime? date;
-  UploadFileList(
-      {Key? key,
-      this.fileName,
-      this.path,
-      String? this.selecTest,
-      DateTime? this.date})
-      : super(key: key);
+  UploadFileList({
+    Key? key,
+    String? this.selecTest,
+    DateTime? this.date,
+    List<File>? this.fileNames,
+    List<File>? this.paths,
+  }) : super(key: key);
 
   @override
   State<UploadFileList> createState() => _UploadFileListState();
@@ -30,15 +30,16 @@ class UploadFileList extends StatefulWidget {
 class _UploadFileListState extends State<UploadFileList> {
   final auth = FirebaseAuth.instance.currentUser;
   double progress = 0.0;
+
   Future<void> getFile() async {
-    print('file name-0000 ${widget.fileName}');
-    File file = await File(widget.path!);
-    print('file path $file');
+    print('file name-0000 ${widget.fileNames!.first}');
+    // File file = await File(widget.path!);
+    // print('file path $file');
     UploadTask? task = FirebaseStorage.instance
         .ref()
         .child('${auth?.email}')
-        .child('/${widget.selecTest! + widget.fileName}')
-        .putData(file.readAsBytesSync());
+        .child('/${widget.selecTest! + widget.fileNames!.first.toString()}')
+        .putData(widget.paths!.first.readAsBytesSync());
     print('--------------------$task');
     task.snapshotEvents.listen((event) {
       setState(() {
@@ -57,6 +58,7 @@ class _UploadFileListState extends State<UploadFileList> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     getFile();
   }
 
@@ -103,7 +105,7 @@ class _UploadFileListState extends State<UploadFileList> {
         ),
 
         Container(
-          child: widget.fileName != null
+          child: widget.fileNames != null
               ? Padding(
                   padding: EdgeInsets.only(left: 26, right: 26),
                   child: Container(
@@ -128,7 +130,7 @@ class _UploadFileListState extends State<UploadFileList> {
                                     SizedBox(
                                       width: 200,
                                       child: Text(
-                                        '${widget.fileName}',
+                                        '${widget.fileNames!.first.toString()}',
                                         style: TextStyle(
                                             fontSize: 13,
                                             fontWeight: FontWeight.w500,
