@@ -6,7 +6,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:roojh/homepage/upload_file/view/testForm.dart';
+
+import '../../../FirebaseAuth/firebase_storage/firebase_storage.dart';
 
 // ###################################
 // main page for upload file
@@ -15,12 +18,14 @@ class UploadFileList extends StatefulWidget {
   List<File>? paths;
   String? selecTest;
   DateTime? date;
+  String? summery;
   UploadFileList({
     Key? key,
     String? this.selecTest,
     DateTime? this.date,
     List<File>? this.fileNames,
     List<File>? this.paths,
+    String? this.summery,
   }) : super(key: key);
 
   @override
@@ -28,13 +33,16 @@ class UploadFileList extends StatefulWidget {
 }
 
 class _UploadFileListState extends State<UploadFileList> {
+  // ############################
+  // get current user details
   final auth = FirebaseAuth.instance.currentUser;
+  // loading indicator start from 0
   double progress = 0.0;
-
+// #################################
+// get file from test form and upload in firebase storage
   Future<void> getFile() async {
-    print('file name-0000 ${widget.fileNames!.first}');
-    // File file = await File(widget.path!);
-    // print('file path $file');
+    // print('file name-0000 ${widget.fileNames!.first}');
+
     UploadTask? task = FirebaseStorage.instance
         .ref()
         .child('${auth?.email}')
@@ -51,7 +59,25 @@ class _UploadFileListState extends State<UploadFileList> {
         print(progress);
       });
     });
-    task.whenComplete(() => null);
+
+    // #############################
+    // when upload complete the information of file will save in firebase database
+    await await task.whenComplete(() async {
+      String? pdfUrl = (await task.storage
+          .ref()
+          .child('${auth?.email}')
+          .child('/${widget.selecTest! + widget.fileNames!.first.toString()}')
+          .getDownloadURL());
+      print('url________________________$pdfUrl');
+      FireStoreDatabase().users.add({
+        'summery': widget.summery,
+        'pdfUrl': pdfUrl,
+        'date': widget.date,
+        'documentType': widget.selecTest,
+        'email': auth?.email,
+        'uid': auth?.uid
+      });
+    });
   }
 
   @override

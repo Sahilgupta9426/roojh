@@ -27,7 +27,6 @@ class _TestFormState extends State<TestForm> {
   // ##############################
   //For Date form
   DateTime selectedDate = DateTime.now();
-
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
@@ -40,10 +39,13 @@ class _TestFormState extends State<TestForm> {
       });
   }
 
+// #####################
+// for selected files names
   List<File>? fileNames;
-
+// #####################
+// for selected files path
   List<File>? filePaths;
-  late File file;
+
   @override
   Widget build(BuildContext context) {
     final summeryController = TextEditingController();
@@ -56,6 +58,8 @@ class _TestFormState extends State<TestForm> {
             SizedBox(
               height: 28,
             ),
+            // ################################
+            // for exit this page
             Container(
               padding: EdgeInsets.only(right: 10),
               child: Align(
@@ -70,6 +74,8 @@ class _TestFormState extends State<TestForm> {
                     },
                   )),
             ),
+            // ##########################$
+            // input form
             Form(
               key: _formKey,
               child: Padding(
@@ -87,11 +93,13 @@ class _TestFormState extends State<TestForm> {
                     SizedBox(
                       height: 30,
                     ),
+                    // ##########################$
+                    // upload form input
                     TextButton(
                         onPressed: () async {
                           FilePickerResult? getFile = await FilePicker.platform
                               .pickFiles(
-                                  allowMultiple: true,
+                                  allowMultiple: false,
                                   type: FileType.custom,
                                   allowedExtensions: ['pdf']);
                           print(getFile);
@@ -290,19 +298,8 @@ class _TestFormState extends State<TestForm> {
                                     fileNames: fileNames,
                                     paths: filePaths,
                                     selecTest: selecTest,
-                                    date: selectedDate)));
-                            // var result = await storage.uploadFile(
-                            //     path, filename, selecTest, email);
-                            // await FireStoreDatabase().users.add({
-                            //   'summery': summery,
-                            //   // 'pdfUrl': result,
-                            //   'date': selectedDate,
-                            //   'documentType': selecTest,
-                            //   'email': auth?.email,
-                            //   'uid': auth?.uid
-                            // }).then((value) => Navigator.of(context)
-                            //     .pushReplacement(MaterialPageRoute(
-                            //         builder: (context) => UploadFileList())));
+                                    date: selectedDate,
+                                    summery: summery)));
                           }
                         },
                         child: Align(
